@@ -47,7 +47,6 @@
 				const ballX = x + pendulumLength * Math.sin(angle);
 				const ballY = y + pendulumLength * Math.cos(angle);
 
-				// Рисуем нить
 				ctx.beginPath();
 				ctx.moveTo(x, y);
 				ctx.lineTo(ballX, ballY);
@@ -55,7 +54,6 @@
 				ctx.lineWidth = 2;
 				ctx.stroke();
 
-				// Рисуем шарик
 				ctx.beginPath();
 				ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
 				ctx.fillStyle = color;
