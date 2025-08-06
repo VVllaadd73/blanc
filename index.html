@@ -27,16 +27,13 @@
 
 			const centerX = canvas.width / 2;
 			const centerY = canvas.height / 3;
-			const pendulumLength = 250; // Длина нитей маятников
-			const ballRadius = 30; // Радиус шариков
-			const ballDistance = ballRadius * 3; // Расстояние между маятниками (полтора диаметра)
-			const colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'cyan']; // Цвета маятников
-			const g = 0.98; // Ускорение свободного падения
-
-			// Параметры каждого маятника
+			const pendulumLength = 250;
+			const ballRadius = 30;
+			const ballDistance = ballRadius * 3;
+			const colors = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'cyan'];
+			const g = 0.98; 
 			const pendulums = [
-				{ angle: -Math.PI / 4, angularVelocity: 0, color: colors[0] }, // Левый маятник отклонён
-				{ angle: 0, angularVelocity: 0, color: colors[1] },
+				{ angle: -Math.PI / 4, angularVelocity: 0, color: colors[0] },
 				{ angle: 0, angularVelocity: 0, color: colors[2] },
 				{ angle: 0, angularVelocity: 0, color: colors[3] },
 				{ angle: 0, angularVelocity: 0, color: colors[4] },
@@ -44,7 +41,6 @@
 				{ angle: 0, angularVelocity: 0, color: colors[6] }
 			];
 
-			// Добавляем звук
 			const collisionSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
 
 			function drawPendulum(x, y, angle, color) {
@@ -69,28 +65,24 @@
 			}
 
 			function resolveCollision(p1, p2) {
-				// Упругое столкновение по принципу обмена скоростями
+				
 				const tempVelocity = p1.angularVelocity;
 				p1.angularVelocity = p2.angularVelocity;
 				p2.angularVelocity = tempVelocity;
 
-				// Проигрываем звук столкновения
 				collisionSound.play();
 			}
 
 			function updatePhysics() {
-				// Обновление углов движения маятников
 				pendulums.forEach((pendulum) => {
 					pendulum.angularVelocity += (-g / pendulumLength) * Math.sin(pendulum.angle);
 					pendulum.angle += pendulum.angularVelocity;
 				});
 
-				// Проверка столкновений между шарами
 				for (let i = 0; i < pendulums.length - 1; i++) {
 					const p1 = pendulums[i];
 					const p2 = pendulums[i + 1];
 
-					// Вычисляем позиции шариков
 					const x1 = centerX - (pendulums.length / 2 - i) * ballDistance + pendulumLength * Math.sin(p1.angle);
 					const y1 = centerY + pendulumLength * Math.cos(p1.angle);
 
@@ -99,11 +91,9 @@
 
 					const dist = Math.hypot(x2 - x1, y2 - y1);
 
-					// Если произошло столкновение, обрабатываем его
 					if (dist < 2 * ballRadius) {
 						resolveCollision(p1, p2);
 
-						// Раздвигаем маятники, чтобы избежать перекрытий
 						const overlap = 2 * ballRadius - dist;
 						const correctionX = (x2 - x1) / dist * overlap;
 						const correctionY = (y2 - y1) / dist * overlap;
